@@ -506,48 +506,26 @@ async function analyzeWithGemini(resumeText, jobDescription) {
   const createPrompt = (
     resume,
     job
-  ) => `You are a strict hiring manager conducting a technical skills assessment. 
+  ) => `Analyze the resume against the job description strictly.
+RESUME: ${resume.substring(0, 10000)}
+JOB: ${job.substring(0, 2000)}
 
-RESUME:
-${resume}
+Provide JSON output:
+1. matchPercentage (0-100)
+2. missingSkills (List strings)
+3. matchedSkills (List strings)
+4. skillPriority (Object with critical/important/optional arrays)
+5. skillExplanations (Array of objects {skill, explanation, importance}. KEEP SHORT. 1 sentence max.)
+6. recommendations (Array of objects {skill, description, priority}. KEEP SHORT. 1 sentence max.)
 
-JOB DESCRIPTION:
-${job}
-
-TASK: Analyze the resume against the job description and provide:
-
-1. Match Percentage (0-100): How well the candidate's skills align with the job requirements
-2. Missing Skills: List of technical skills mentioned in the job description but NOT found in the resume
-3. Matched Skills: List of technical skills the candidate HAS that are required for the job
-4. Skill Priority: For each missing skill, classify as 'critical', 'important', or 'optional'
-5. Skill Explanations: Brief (1-2 sentence) beginner-friendly explanation of what each missing skill is and why it matters
-6. Recommendations: Detailed learning path for each missing skill (2-3 sentences each)
-
-IMPORTANT RULES:
-- Only extract skills explicitly mentioned in the job description
-- Be strict - only mark a skill as "matched" if it's clearly present in the resume
-- Focus on technical skills (programming languages, frameworks, tools, technologies)
-- Ignore soft skills
-- Return ONLY valid JSON, no markdown formatting
-
-Return your response in this EXACT JSON format:
+Return ONLY valid JSON.
 {
-  "matchPercentage": <number 0-100>,
-  "missingSkills": ["skill1", "skill2", ...],
-  "matchedSkills": ["skill1", "skill2", ...],
-  "skillPriority": {
-    "critical": ["skill1", "skill2"],
-    "important": ["skill3", "skill4"],
-    "optional": ["skill5"]
-  },
-  "skillExplanations": [
-    {"skill": "skill name", "explanation": "beginner-friendly explanation", "importance": "why it matters"},
-    ... 
-  ],
-  "recommendations": [
-    {"skill": "skill name", "description": "detailed learning path", "priority": "critical/important/optional"},
-    ... 
-  ]
+  "matchPercentage": 0,
+  "missingSkills": [],
+  "matchedSkills": [],
+  "skillPriority": { "critical": [], "important": [], "optional": [] },
+  "skillExplanations": [{ "skill": "", "explanation": "", "importance": "" }],
+  "recommendations": [{ "skill": "", "description": "", "priority": "" }]
 }`;
 
   async function tryGenerate(modelName) {
@@ -1266,6 +1244,7 @@ app.get("/api/test-gemini", async (req, res) => {
     res.json({
       status: "success",
       message: "Gemini API is working",
+      model: availableModel,
       response: text,
     });
   } catch (error) {
@@ -1280,6 +1259,15 @@ app.get("/api/test-gemini", async (req, res) => {
 // Serve frontend
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Global Error Handler (Moved before app.listen)
+app.use((err, req, res, next) => {
+  console.error("Unhandled Error:", err);
+  res.status(500).json({
+    error: "Internal Server Error",
+    message: process.env.NODE_ENV === "production" ? "Something went wrong" : err.message
+  });
 });
 
 // Start server
@@ -1299,15 +1287,6 @@ app.listen(PORT, () => {
   if (!genAI) {
     console.log("⚠️ Please configure GEMINI_API_KEY in .env file");
   }
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error("Unhandled Error:", err);
-  res.status(500).json({
-    error: "Internal Server Error",
-    message: process.env.NODE_ENV === "production" ? "Something went wrong" : err.message
-  });
-});
-
 });
 
 module.exports = app;
