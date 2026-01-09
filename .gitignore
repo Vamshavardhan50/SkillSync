@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.example
+
+# Firebase
+.firebase/
+.firebaserc
+firebase-debug.log
+
+# Google Cloud credentials
+config/service-account-key.json
+config/service-account-key.json
+# *.json - Removed to allow package.json etc.
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+DIAGRAMS.md
+ERASER-DIAGRAMS.md
+PPT-DIAGRAMS.md
+WIREFRAMES.md

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login - SkillSync</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      .admin-login-container {
+        max-width: 450px;
+        margin: 80px auto;
+        padding: 40px;
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(124, 58, 237, 0.3);
+      }
+
+      .admin-header {
+        text-align: center;
+        margin-bottom: 30px;
+        color: white;
+      }
+
+      .admin-header .lock-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+
+      .admin-header h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+
+      .admin-header p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+      }
+
+      .login-form-wrapper {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #374151;
+        font-weight: 600;
+      }
+
+      .input-with-icon {
+        position: relative;
+      }
+
+      .input-with-icon span {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+      }
+
+      .input-with-icon input {
+        width: 100%;
+        padding: 12px 12px 12px 40px;
+        border: 2px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+      }
+
+      .input-with-icon input:focus {
+        outline: none;
+        border-color: #7c3aed;
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+      }
+
+      .two-factor-note {
+        background: #fef3c7;
+        border: 1px solid #fcd34d;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        font-size: 13px;
+        color: #92400e;
+      }
+
+      .two-factor-note strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .btn-admin-login {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-admin-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+      }
+
+      .btn-admin-login:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .security-notice {
+        background: #fee2e2;
+        border: 1px solid #fca5a5;
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 20px;
+        font-size: 13px;
+        color: #991b1b;
+        text-align: center;
+      }
+
+      .security-notice .icon {
+        margin-right: 8px;
+      }
+
+      .back-link {
+        text-align: center;
+        margin-top: 24px;
+      }
+
+      .back-link a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+        transition: opacity 0.3s;
+      }
+
+      .back-link a:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+      }
+
+      .alert {
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .alert-error {
+        background: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fca5a5;
+      }
+
+      .alert-success {
+        background: #d1fae5;
+        color: #059669;
+        border: 1px solid #6ee7b7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-login-container">
+      <div class="admin-header">
+        <div class="lock-icon">🔒</div>
+        <h1>SkillSync Admin</h1>
+        <p>Administrative Access</p>
+      </div>
+
+      <div class="login-form-wrapper">
+        <div id="alert" class="alert"></div>
+
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label for="username">Admin Username</label>
+            <div class="input-with-icon">
+              <span>👤</span>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="admin"
+                required
+                autocomplete="username"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Admin Password</label>
+            <div class="input-with-icon">
+              <span>🔑</span>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="twoFactor"
+              >2FA Code
+              <span style="color: #9ca3af; font-weight: 400"
+                >(Optional)</span
+              ></label
+            >
+            <div class="input-with-icon">
+              <span>🔐</span>
+              <input
+                type="text"
+                id="twoFactor"
+                name="twoFactor"
+                placeholder="000000"
+                maxlength="6"
+                pattern="[0-9]{6}"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-admin-login" id="loginBtn">
+            <span>🔒</span>
+            Secure Login
+          </button>
+        </form>
+
+        <div class="security-notice">
+          <span class="icon">⚠️</span>
+          <strong>All admin actions are logged and monitored</strong>
+        </div>
+      </div>
+
+      <div class="back-link">
+        <a href="login.html">← Back to Student Login</a>
+      </div>
+    </div>
+
+    <script>
+      const adminLoginForm = document.getElementById("adminLoginForm");
+      const loginBtn = document.getElementById("loginBtn");
+      const alertBox = document.getElementById("alert");
+
+      function showAlert(message, type) {
+        alertBox.textContent = message;
+        alertBox.className = `alert alert-${type}`;
+        alertBox.style.display = "block";
+
+        if (type === "success") {
+          setTimeout(() => {
+            alertBox.style.display = "none";
+          }, 3000);
+        }
+      }
+
+      adminLoginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const twoFactor = document.getElementById("twoFactor").value;
+
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = "<span>⏳</span> Authenticating...";
+
+        try {
+          // For admin login, we'll use email as username
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: username, // Admin uses username as email
+              password,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Check if user is admin
+            if (data.user.role !== "admin") {
+              showAlert("Access denied. Admin privileges required.", "error");
+              loginBtn.disabled = false;
+              loginBtn.innerHTML = "<span>🔒</span> Secure Login";
+              return;
+            }
+
+            // Store token
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            showAlert("Admin login successful! Redirecting...", "success");
+
+            // Redirect to admin dashboard
+            setTimeout(() => {
+              window.location.href = "admin.html";
+            }, 1000);
+          } else {
+            showAlert(data.error || "Login failed", "error");
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = "<span>🔒</span> Secure Login";
+          }
+        } catch (error) {
+          console.error("Admin login error:", error);
+          showAlert("Connection error. Please try again.", "error");
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = "<span>🔒</span> Secure Login";
+        }
+      });
+
+      // Check if already logged in as admin
+      window.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+        if (token && user.role === "admin") {
+          window.location.href = "admin.html";
+        }
+      });
+    </script>
+  </body>
+</html>

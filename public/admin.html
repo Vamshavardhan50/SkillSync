@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - SkillSync</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style="stop-color: #667eea; stop-opacity: 1"
+                />
+                <stop
+                  offset="100%"
+                  style="stop-color: #764ba2; stop-opacity: 1"
+                />
+              </linearGradient>
+            </defs>
+            <circle cx="20" cy="20" r="20" fill="url(#logoGrad)" />
+            <path
+              d="M12 20l6 6 10-12"
+              stroke="white"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>SkillSync Admin</span>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="admin.html" class="nav-link active">Dashboard</a>
+          <a href="#" class="nav-link" id="logoutBtn" style="color: #ef4444"
+            >Logout</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+      <div class="container">
+        <div class="dashboard-header">
+          <div>
+            <h1>Analytics Dashboard</h1>
+            <p>
+              Real-time insights into student skill gaps and placement readiness
+            </p>
+          </div>
+          <button class="btn-refresh" onclick="loadDashboardData()">
+            🔄 Refresh Data
+          </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+              <div class="stat-value" id="totalStudents">0</div>
+              <div class="stat-label">Total Students</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-content">
+              <div class="stat-value" id="uniqueSkills">0</div>
+              <div class="stat-label">Unique Skills</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+              <div class="stat-value" id="averageMatch">0%</div>
+              <div class="stat-label">Avg Match Score</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🏢</div>
+            <div class="stat-content">
+              <div class="stat-value" id="totalDepartments">0</div>
+              <div class="stat-label">Departments</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Top Missing Skills</h3>
+            <canvas id="topSkillsChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Match Score Distribution</h3>
+            <canvas id="matchDistChart"></canvas>
+          </div>
+        </div>
+
+        <!-- New Enhanced Charts -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Trending Skills (Last 4 Weeks)</h3>
+            <canvas id="trendingChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Skill Priority Breakdown</h3>
+            <canvas id="priorityChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Department Stats -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Department Analysis</h3>
+            <canvas id="departmentChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Academic Year Analysis</h3>
+            <canvas id="yearChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Company Readiness -->
+        <div class="chart-card full-width">
+          <h3>Top Companies - Student Readiness</h3>
+          <canvas id="companyChart"></canvas>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+          <h3>Filter Analytics</h3>
+          <div class="filter-controls">
+            <select id="departmentFilter" class="filter-select">
+              <option value="">All Departments</option>
+            </select>
+            <select id="yearFilter" class="filter-select">
+              <option value="">All Years</option>
+            </select>
+            <button class="btn-filter" onclick="applyFilters()">
+              Apply Filters
+            </button>
+            <button class="btn-export" onclick="exportData()">
+              📥 Export Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+          <h3>Recent Analyses</h3>
+          <div class="activity-list" id="activityList">
+            <div class="empty-state">No activity yet</div>
+          </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="alerts-section" id="alertsSection" style="display: none">
+          <h3>Skill Gap Alerts</h3>
+          <div class="alerts-list" id="alertsList"></div>
+        </div>
+      </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script>
+      // Logout functionality
+      document
+        .getElementById("logoutBtn")
+        ?.addEventListener("click", async (e) => {
+          e.preventDefault();
+
+          try {
+            await fetch("/api/auth/logout", { method: "POST" });
+          } catch (error) {
+            console.error("Logout error:", error);
+          }
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          sessionStorage.removeItem("token");
+
+          window.location.href = "admin-login.html";
+        });
+    </script>
+    <script src="js/admin.js"></script>
+  </body>
+</html>

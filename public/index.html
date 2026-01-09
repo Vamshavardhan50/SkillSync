@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillSync - AI-Powered Career Coach</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style="stop-color: #667eea; stop-opacity: 1"
+                />
+                <stop
+                  offset="100%"
+                  style="stop-color: #764ba2; stop-opacity: 1"
+                />
+              </linearGradient>
+            </defs>
+            <circle cx="20" cy="20" r="20" fill="url(#logoGrad)" />
+            <path
+              d="M12 20l6 6 10-12"
+              stroke="white"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span>SkillSync</span>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a
+            href="admin.html"
+            class="nav-link"
+            id="adminLink"
+            style="display: none"
+            >Dashboard</a
+          >
+          <span
+            id="userWelcome"
+            style="margin: 0 15px; color: #667eea; display: none"
+          ></span>
+          <a href="#" class="nav-link" id="logoutBtn" style="display: none"
+            >Logout</a
+          >
+          <a href="login.html" class="nav-link" id="loginLink">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="container">
+          <div class="hero-content">
+            <div class="badge">✨ AI-Powered Career Guidance</div>
+            <h1>
+              Get Job-Ready with<br /><span class="gradient-text"
+                >Personalized Insights</span
+              >
+            </h1>
+            <p>
+              Upload your resume and job description to get instant AI analysis
+              of your skill gaps and personalized learning recommendations
+            </p>
+            <div class="hero-stats">
+              <div class="stat">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Resumes Analyzed</div>
+              </div>
+              <div class="stat">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Success Rate</div>
+              </div>
+              <div class="stat">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Companies</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analysis Section -->
+      <section class="analysis-section">
+        <div class="container">
+          <div class="upload-container">
+            <!-- Input Form -->
+            <div class="input-panel">
+              <h2>Start Your Analysis</h2>
+
+              <!-- Resume Upload -->
+              <div class="upload-zone" id="uploadZone">
+                <input
+                  type="file"
+                  id="resumeFile"
+                  accept=".pdf,.png,.jpg,.jpeg"
+                  hidden
+                />
+                <div class="upload-icon">📄</div>
+                <h3>Upload Your Resume</h3>
+                <p>Drop your resume here or click to browse</p>
+                <button
+                  type="button"
+                  class="btn-upload"
+                  onclick="document.getElementById('resumeFile').click()"
+                >
+                  Choose File
+                </button>
+                <span class="file-types">PDF, PNG, JPG (Max 5MB)</span>
+              </div>
+
+              <!-- Student Info -->
+              <div class="form-group">
+                <label>Your Name</label>
+                <input
+                  type="text"
+                  id="studentName"
+                  placeholder="Enter your full name"
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Department</label>
+                  <select id="department" class="form-input">
+                    <option value="">Select your department</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Information Technology">
+                      Information Technology
+                    </option>
+                    <option value="Electronics">
+                      Electronics & Communication
+                    </option>
+                    <option value="Mechanical">Mechanical Engineering</option>
+                    <option value="Civil">Civil Engineering</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Academic Year</label>
+                  <select id="academicYear" class="form-input">
+                    <option value="">Select year</option>
+                    <option value="First Year">First Year</option>
+                    <option value="Second Year">Second Year</option>
+                    <option value="Third Year">Third Year</option>
+                    <option value="Final Year">Final Year</option>
+                    <option value="Post Graduate">Post Graduate</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Company/Target Role (Optional)</label>
+                <input
+                  type="text"
+                  id="companyName"
+                  placeholder="e.g., Google, Microsoft, Startup, etc."
+                  class="form-input"
+                />
+              </div>
+
+              <!-- Job Description -->
+              <div class="form-group">
+                <label>Job Description</label>
+                <textarea
+                  id="jobDescription"
+                  rows="8"
+                  class="form-input"
+                  placeholder="Paste the job description here...&#10;&#10;Example:&#10;Job Title: Software Engineer&#10;Required Skills: Python, React, Node.js, AWS..."
+                ></textarea>
+              </div>
+
+              <button id="analyzeBtn" class="btn-primary">
+                <span class="btn-text">Analyze Skills</span>
+                <span class="btn-icon">→</span>
+              </button>
+
+              <!-- Loading State -->
+              <div
+                id="loadingState"
+                class="loading-state"
+                style="display: none"
+              >
+                <div class="spinner"></div>
+                <p>Analyzing your resume with AI...</p>
+              </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="results-panel" id="resultsPanel" style="display: none">
+              <div class="results-header">
+                <h2>Analysis Results</h2>
+                <button class="btn-close" onclick="resetAnalysis()">✕</button>
+              </div>
+
+              <!-- Match Score -->
+              <div class="match-score-card">
+                <div class="score-circle">
+                  <svg class="score-ring" viewBox="0 0 200 200">
+                    <circle class="score-ring-bg" cx="100" cy="100" r="85" />
+                    <circle
+                      class="score-ring-fill"
+                      cx="100"
+                      cy="100"
+                      r="85"
+                      id="scoreCircle"
+                    />
+                  </svg>
+                  <div class="score-text">
+                    <span class="score-number" id="matchScore">0</span>
+                    <span class="score-label">Match</span>
+                  </div>
+                </div>
+                <div class="score-info">
+                  <h3 id="scoreTitle">Great Match!</h3>
+                  <p id="scoreDesc">You have most of the required skills</p>
+                </div>
+              </div>
+
+              <!-- Skills Breakdown -->
+              <div class="skills-section">
+                <h3>✅ Matched Skills</h3>
+                <div class="skills-list" id="matchedSkills"></div>
+              </div>
+
+              <div class="skills-section">
+                <h3>❌ Skills to Learn</h3>
+                <div class="skills-list" id="missingSkills"></div>
+              </div>
+
+              <!-- Skill Explanations -->
+              <div
+                class="skills-section"
+                id="skillExplanationsSection"
+                style="display: none"
+              >
+                <h3>💡 Understanding Key Skills</h3>
+                <div id="skillExplanations"></div>
+              </div>
+
+              <!-- Recommendations -->
+              <div class="recommendations-section">
+                <h3>📚 Learning Recommendations</h3>
+                <div
+                  class="recommendations-list"
+                  id="recommendationsList"
+                ></div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="action-buttons">
+                <button class="btn-secondary" onclick="window.print()">
+                  📄 Download Report
+                </button>
+                <button class="btn-primary" onclick="resetAnalysis()">
+                  🔄 New Analysis
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features-section">
+        <div class="container">
+          <h2 class="section-title">Why Choose SkillSync?</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🤖</div>
+              <h3>AI-Powered Analysis</h3>
+              <p>
+                Advanced Gemini AI analyzes your resume against job requirements
+                in seconds
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🎯</div>
+              <h3>Personalized Insights</h3>
+              <p>
+                Get tailored skill gap analysis and learning recommendations
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">📊</div>
+              <h3>Track Progress</h3>
+              <p>Monitor your skill development and improvement over time</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">⚡</div>
+              <h3>Instant Results</h3>
+              <p>Get comprehensive analysis in under 10 seconds</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 SkillSync. Powered by Google Gemini AI</p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="js/config.js"></script>
+    <script>
+      // Check authentication status
+      window.addEventListener("DOMContentLoaded", () => {
+        const token =
+          localStorage.getItem("token") || sessionStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+        if (token && user.fullName) {
+          // User is logged in
+          document.getElementById(
+            "userWelcome"
+          ).textContent = `Welcome, ${user.fullName}!`;
+          document.getElementById("userWelcome").style.display = "inline";
+          document.getElementById("logoutBtn").style.display = "inline";
+          document.getElementById("loginLink").style.display = "none";
+
+          if (user.role === "admin") {
+            document.getElementById("adminLink").style.display = "inline";
+          }
+        }
+      });
+
+      // Logout functionality
+      document
+        .getElementById("logoutBtn")
+        ?.addEventListener("click", async (e) => {
+          e.preventDefault();
+
+          try {
+            await fetch("/api/auth/logout", { method: "POST" });
+          } catch (error) {
+            console.error("Logout error:", error);
+          }
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          sessionStorage.removeItem("token");
+
+          window.location.href = "login.html";
+        });
+    </script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
